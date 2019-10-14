@@ -1,0 +1,101 @@
+{
+    "cp_root": "../checkpoint/twitter_ner", 
+    "checkpoint_name": "tnt_ner0", 
+    "git_tracking": true, 
+    "gpu": "auto", 
+    "update": "Nadam", 
+    "lr": 0.002, 
+    "lr_decay": -1.0,
+    "decay_at_epoch": 32,
+    "decay_rate": 0.5,
+    "clip": 1,
+    "batch_size": 32,
+    "patience": 15,
+    "epoch": 64,
+    "input_files": ["../data/TNT/train.json", "../data/TNT/test.json", "../data/TNT/dev.json"],
+    "save_to": ["../data/TNT/train_encoded.json", "../data/TNT/test_encoded.json", "../data/TNT/dev_encoded.json", "../data/TNT/train_dev_encoded.json"],
+    "train_file": "../data/TNT/train_dev_encoded.json", 
+    "dev_file": "../data/TNT/test_encoded.json", 
+    "test_file": "", 
+    "strEncoder": {
+        "lm": {
+            "lm_dict": "../data/dict/enriched_char_dict.json"
+        },
+        "sm": {
+            "lm_dict": "../data/dict/enriched_char_dict.json",
+            "embed_seperator": "\t",
+            "embed": "../data/embed/twitter.txt",
+            "lower": true,
+            "one_mention": true,
+            "remove_ht": true
+        },
+        "label": {
+            "generate_label_dict": true,
+            "label_dict": "../data/tnt/label_dict.json",
+            "convert_to_iobes": true
+        },
+        "ori": {}
+    },
+    "spEncoder": {
+        "lm": {
+            "input": "lm",
+            "c_num": 73, 
+            "c_dim_lm": 128, 
+            "t_num": 4, 
+            "t_dim_lm": 128, 
+            "lm_dict": "../data/dict/enriched_char_dict.json",
+            "frnn_layer_num": 1, 
+            "frnn_emb_dim": 256,
+            "frnn_hid_dim": 2048,
+            "frnn_unit": "lstm",
+            "flm_weight": "../lm/checkpoint/a0/best.th",
+            "brnn_layer_num": 1,
+            "brnn_emb_dim": 256,
+            "brnn_hid_dim": 2048,
+            "brnn_unit": "lstm",
+            "blm_weight": "../lm/checkpoint/a0_/best.th",
+            "emb_project_to": 100,
+            "lm_droprate": 0.5,
+            "droprate": 0.5,
+            "word_droprate": 0.1
+        },
+        "sm": {
+            "input": "sm",
+            "embed_seperator": "\t",
+            "embed": "../data/embed/twitter.txt",
+            "word_droprate": 0.1
+        },
+        "char": {
+            "lm_dict": "../data/dict/enriched_char_dict.json",
+            "input": "lm",
+            "c_num": 73, 
+            "t_num": 4, 
+            "char_layer_num": 1, 
+            "char_unit": "lstm", 
+            "char_emb_dim": 64, 
+            "char_hid_dim": 150, 
+            "emb_project_to": 100,
+            "c_dim_char": 32, 
+            "t_dim_char": 32, 
+            "droprate": 0.5,
+            "word_droprate": 0.1
+        }
+    },
+    "denEncoder": {
+        "word_droprate": 0.0,
+        "rnn_layer": 1,
+        "rnn_unit": "lstm",
+        "rnn_input": 300,
+        "rnn_hidden": 256,
+        "droprate": 0.5,
+        "input_fields": ["lm", "sm", "char"]
+    },
+    "spDecoder": {
+        "label_dict": "../data/dict/label_dict_2.json",
+        "input_dim": 512,
+        "droprate": 0.5
+    },
+    "strDecoder": {
+        "label_dict": "../data/dict/label_dict_2.json"
+    }
+}

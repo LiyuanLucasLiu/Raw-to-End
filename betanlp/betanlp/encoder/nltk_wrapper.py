@@ -1,9 +1,9 @@
-import nltk
 import re
 import emoji
 
 class NLTK_wrapper:
     def __init__(self, emb_path):
+        import nltk
         self.ccef_vocab = {}
         vocab_size = 0
         self.unk_index = -1

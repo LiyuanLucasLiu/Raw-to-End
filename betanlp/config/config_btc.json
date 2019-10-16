@@ -1,7 +1,7 @@
 {
     "cp_root": "../checkpoint/twitter_ner", 
     "checkpoint_name": "btc_ner0", 
-    "git_tracking": true, 
+    "git_tracking": false, 
     "gpu": "auto", 
     "update": "Nadam", 
     "lr": 0.002, 
@@ -15,8 +15,8 @@
     "input_files": ["../data/BTC/train.json", "../data/BTC/test.json", "../data/BTC/dev.json"],
     "save_to": ["../data/BTC/train_encoded.json", "../data/BTC/test_encoded.json", "../data/BTC/dev_encoded.json", "../data/BTC/train_dev_encoded.json"],
     "train_file": "../data/BTC/train_dev_encoded.json", 
-    "dev_file": "../data/BTC/test_encoded.json", 
-    "test_file": "", 
+    "test_file": "../data/BTC/test_encoded.json", 
+    "dev_file": "", 
     "strEncoder": {
         "lm": {
             "lm_dict": "../data/dict/enriched_char_dict.json"
@@ -31,7 +31,7 @@
         },
         "label": {
             "generate_label_dict": true,
-            "label_dict": "../data/btc/label_dict.json",
+            "label_dict": "../data/BTC/label_dict.json",
             "convert_to_iobes": true
         },
         "ori": {}
@@ -91,11 +91,11 @@
         "input_fields": ["lm", "sm", "char"]
     },
     "spDecoder": {
-        "label_dict": "../data/btc/label_dict.json",
+        "label_dict": "../data/BTC/label_dict.json",
         "input_dim": 512,
         "droprate": 0.5
     },
     "strDecoder": {
-        "label_dict": "../data/btc/label_dict.json"
+        "label_dict": "../data/BTC/label_dict.json"
     }
 }

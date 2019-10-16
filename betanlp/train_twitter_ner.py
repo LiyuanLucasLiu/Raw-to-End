@@ -45,12 +45,12 @@ if __name__ == "__main__":
 
     logger.info('Loading the data...')
     train_data = strFromFileEncoderWrapper(args, processed_file = args['train_file'])
-    dev_data = strFromFileEncoderWrapper(args, processed_file = args['dev_file'])
+    test_data = strFromFileEncoderWrapper(args, processed_file = args['test_file'])
 
-    if args['test_file']:
-        test_data = strFromFileEncoderWrapper(args, processed_file = args['test_file'])
+    if args['dev_file']:
+        dev_data = strFromFileEncoderWrapper(args, processed_file = args['dev_file'])
     else:
-        test_data = None
+        dev_data = None
 
     logger.info('Loading to GPU: {}'.format(gpu_index))
     model.to(device)
@@ -109,21 +109,21 @@ if __name__ == "__main__":
             adjust_learning_rate(optimizer, current_lr)
             logger.info('lr is modified to: {}'.format(current_lr))
 
-        dev_f1, dev_pre, dev_rec, dev_acc = evaluator.calc_score(model, dev_data.get_tqdm(device, args['batch_size']))
+        test_f1, test_pre, test_rec, test_acc = evaluator.calc_score(model, test_data.get_tqdm(device, args['batch_size']))
 
-        pw.add_loss_vs_batch({'dev_f1': dev_f1}, indexs, use_logger = True)
-        pw.add_loss_vs_batch({'dev_pre': dev_pre, 'dev_rec': dev_rec}, indexs, use_logger = False)
+        pw.add_loss_vs_batch({'test_f1': test_f1}, indexs, use_logger = True)
+        pw.add_loss_vs_batch({'test_pre': test_pre, 'test_rec': test_rec}, indexs, use_logger = False)
         
-        logger.info('Saving model...')
-        if dev_f1 > best_f1:
-            torch.save(model, os.path.join(args['cp_root'], args['checkpoint_name'], 'best.th'))
+        if dev_data is not None:
+            dev_f1, dev_pre, dev_rec, dev_acc = evaluator.calc_score(model, dev_data.get_tqdm(device, args['batch_size']))
 
-        if test_data is not None:
             if dev_f1 > best_f1:
-                test_f1, test_pre, test_rec, test_acc = evaluator.calc_score(model, test_data.get_tqdm(device, args['batch_size']))
+                logger.info('Saving model...')
+                torch.save(model, os.path.join(args['cp_root'], args['checkpoint_name'], 'best.th'))
+
                 best_f1, best_dev_pre, best_dev_rec, best_dev_acc = dev_f1, dev_pre, dev_rec, dev_acc
-                pw.add_loss_vs_batch({'test_f1': test_f1}, indexs, use_logger = True)
-                pw.add_loss_vs_batch({'test_pre': test_pre, 'test_rec': test_rec}, indexs, use_logger = False)
+                pw.add_loss_vs_batch({'dev_f1': dev_f1}, indexs, use_logger = True)
+                pw.add_loss_vs_batch({'dev_pre': dev_pre, 'dev_rec': dev_rec}, indexs, use_logger = False)
                 patience_count = 0
             else:
                 patience_count += 1

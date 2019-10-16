@@ -182,7 +182,7 @@ class strSMRealTimePipeline(strPipeline):
             logger.error('File not exist: {}'.format(arg['lm_dict']))
             raise
 
-        if ['tokenizer'] not in arg or arg['tokenizer'] == 'Trie':
+        if 'tokenizer' not in arg or arg['tokenizer'] == 'Trie':
             self.trie = PyTrie()
             try:
                 if '\t' == arg['embed_seperator']:

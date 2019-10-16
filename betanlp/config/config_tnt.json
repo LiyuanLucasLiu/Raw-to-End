@@ -1,7 +1,7 @@
 {
     "cp_root": "../checkpoint/twitter_ner", 
     "checkpoint_name": "tnt_ner0", 
-    "git_tracking": true, 
+    "git_tracking": false, 
     "gpu": "auto", 
     "update": "Nadam", 
     "lr": 0.002, 
@@ -15,8 +15,8 @@
     "input_files": ["../data/TNT/train.json", "../data/TNT/test.json", "../data/TNT/dev.json"],
     "save_to": ["../data/TNT/train_encoded.json", "../data/TNT/test_encoded.json", "../data/TNT/dev_encoded.json", "../data/TNT/train_dev_encoded.json"],
     "train_file": "../data/TNT/train_dev_encoded.json", 
-    "dev_file": "../data/TNT/test_encoded.json", 
-    "test_file": "", 
+    "test_file": "../data/TNT/test_encoded.json", 
+    "dev_file": "", 
     "strEncoder": {
         "lm": {
             "lm_dict": "../data/dict/enriched_char_dict.json"
@@ -31,7 +31,7 @@
         },
         "label": {
             "generate_label_dict": true,
-            "label_dict": "../data/tnt/label_dict.json",
+            "label_dict": "../data/TNT/label_dict.json",
             "convert_to_iobes": true
         },
         "ori": {}
@@ -91,11 +91,11 @@
         "input_fields": ["lm", "sm", "char"]
     },
     "spDecoder": {
-        "label_dict": "../data/dict/label_dict_2.json",
+        "label_dict": "../data/TNT/label_dict.json",
         "input_dim": 512,
         "droprate": 0.5
     },
     "strDecoder": {
-        "label_dict": "../data/dict/label_dict_2.json"
+        "label_dict": "../data/TNT/label_dict.json"
     }
 }
